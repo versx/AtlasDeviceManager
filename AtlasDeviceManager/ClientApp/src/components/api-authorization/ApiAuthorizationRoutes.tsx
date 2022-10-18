@@ -36,7 +36,7 @@ const ApiAuthorizationRoutes = [
   },
   {
     path: ApplicationPaths.LogOut,
-    requireAuth: false,
+    requireAuth: true,
     element: logoutAction(LogoutActions.Logout),
     key: LogoutActions.Logout,
   },

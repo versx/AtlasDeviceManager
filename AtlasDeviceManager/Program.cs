@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,6 @@ using AtlasDeviceManager;
 using AtlasDeviceManager.Configuration;
 using AtlasDeviceManager.Data.Contexts;
 using AtlasDeviceManager.Data.Extensions;
-using AtlasDeviceManager.Extensions;
 using AtlasDeviceManager.Models;
 
 
@@ -36,8 +36,6 @@ builder.Services.AddDbContext<UserIdentityDbContext>(options =>
 #endregion
 
 #region Authentication
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Lockout = new LockoutOptions
@@ -74,6 +72,11 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+builder.Services.AddDataProtection()
+    .SetApplicationName(Strings.AssemblyName)
+    .PersistKeysToFileSystem(new DirectoryInfo(Strings.BasePath))
+    .SetDefaultKeyLifetime(TimeSpan.FromDays(36500));
 #endregion
 
 if (builder.Environment.IsDevelopment())

@@ -13,7 +13,6 @@ export class Login extends Component<UserStateProps> {
   state: any;
 
   constructor(props: UserStateProps) {
-    console.log('login props:', props);
     super(props);
 
     this.state = {
@@ -25,7 +24,7 @@ export class Login extends Component<UserStateProps> {
     const action = this.props.action;
     switch (action) {
       case LoginActions.Login:
-        this.login(this.getReturnUrl(this.state));
+        this.login(this.getReturnUrl());
         break;
       case LoginActions.LoginCallback:
         this.processLoginCallback();
@@ -103,7 +102,7 @@ export class Login extends Component<UserStateProps> {
     }
   }
 
-  getReturnUrl(state: any) {
+  getReturnUrl(state?: any) {
     const params = new URLSearchParams(window.location.search);
     const fromQuery = params.get(QueryParameterNames.ReturnUrl);
     if (fromQuery && !fromQuery.startsWith(`${window.location.origin}/`)) {

@@ -46,7 +46,7 @@ export class AuthorizeService {
   async signIn(state: any): Promise<any> {
     await this.ensureUserManagerInitialized();
     try {
-      const silentUser = await this.userManager.signinSilent(this.createArguments(this.state));
+      const silentUser = await this.userManager.signinSilent(this.createArguments());
       this.updateState(silentUser);
       return this.success(state);
     } catch (silentError) {
@@ -59,7 +59,7 @@ export class AuthorizeService {
           throw new Error('Popup disabled. Change \'AuthorizeService.js:AuthorizeService._popupDisabled\' to false to enable it.')
         }
 
-        const popUpUser = await this.userManager.signinPopup(this.createArguments(this.state));
+        const popUpUser = await this.userManager.signinPopup(this.createArguments());
         this.updateState(popUpUser);
         return this.success(state);
       } catch (popUpError: any) {
@@ -162,7 +162,7 @@ export class AuthorizeService {
     }
   }
 
-  createArguments(state: any) {
+  createArguments(state?: any) {
     return { useReplaceToNavigate: true, data: state };
   }
 
@@ -184,7 +184,7 @@ export class AuthorizeService {
     }
 
     const url = ApplicationPaths.ApiAuthorizationClientConfigurationUrl;
-    console.log('url:', url);
+    //console.log('url:', url);
     let response = await fetch(url, { method: 'GET', headers: { 'Access-Control-Allow-Origin': '*' } });
     if (!response.ok) {
       throw new Error(`Could not load settings for '${ApplicationName}'`);

@@ -85,6 +85,13 @@ const dropdownItems: DropdownButtonItem[] = [
     isDivider: false,
   }
 ];
+
+const isDeviceOnline = (lastSeen: number): boolean => {
+  const now = new Date().getTime() / 1000;
+  const isOnline = now - lastSeen <= deviceOnlineThresholdS;
+  return isOnline;
+};
+
 const columns: GridColDef[] = [
   {
     field: 'uuid',
@@ -96,8 +103,7 @@ const columns: GridColDef[] = [
     flex: 2,
     renderCell: (params: GridRenderCellParams) => {
       //console.log('cell params:', params);
-      const now = new Date().getTime() / 1000;
-      const isOnline = now - params.row.last_seen >= deviceOnlineThresholdS;
+      const isOnline = isDeviceOnline(params.row.last_seen);
       const status = isOnline ? DeviceOnlineIcon : DeviceOfflineIcon;
       return `${status} ${params.row.uuid}`;
     },
@@ -201,6 +207,7 @@ export class Devices extends Component {
 
     return (
       <div style={{ height: '700px', width: '100%' }}>
+        <label>Total Online: <span>{devices.filter(device => isDeviceOnline(device.last_seen)).length}</span></label>
         <div style={{ display: 'flex', height: '100%' }}>
           <div style={{ flexGrow: 1, height: '100%' }}>
             <DataGrid

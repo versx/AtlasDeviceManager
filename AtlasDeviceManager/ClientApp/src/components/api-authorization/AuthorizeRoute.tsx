@@ -5,7 +5,6 @@ import { ApplicationPaths, QueryParameterNames } from './ApiAuthorizationConstan
 import authService from './AuthorizeService';
 import { AuthorizeProps } from '../../types/contracts/AuthorizeProps';
 
-
 export default class AuthorizeRoute extends Component<AuthorizeProps> {
   public state: any;
   private _subscription: any;
